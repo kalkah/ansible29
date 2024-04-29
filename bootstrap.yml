@@ -35,6 +35,12 @@
       owner: root
       group: root
       mode: 0440
+  
+  - name: Add ssh key for admin
+    authorized: key
+      user: admin
+      key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHLbfaXRUqSOibSmlXp00TLTefA4I2dBkEM0On7LhPPl ansible
+
 
   - name: Add Ansible SSH key to each node authorized_keys
     authorized_key:
