@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install Apache and PHP for Ubuntu Servers
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install and start Apache and PHP for OracleLinux servers
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "OracleLinux"
+
+  - name: start httpd 
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "OracleLinux"

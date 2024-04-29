@@ -1,3 +1,6 @@
+192.168.100.40 ansible_ssh_user=Oracle
+
+
 [webservers]
 192.168.100.20 ansible_ssh_user=node03
 
@@ -7,3 +10,5 @@
 [fileservers]
 192.168.100.20 ansible_ssh_user=node03
 192.168.100.30 ansible_ssh_user=node02
+
+
