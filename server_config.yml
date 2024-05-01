@@ -27,3 +27,17 @@
       state: started
       enabled: yes
     when: ansible_distribution == "OracleLinux"
+
+  - name: Update ServerAdmin in Apache config
+    lineinfile:
+      path: /etc/apache2/apache2.conf # Adjust for your OS
+      regexp: '^ServerAdmin'
+      line: 'ServerAdmin martin.mato@ingrydacademy.com'
+    tags:
+      - web_server_setup
+
+  - name: Configure firewall for HTTP and HTTPS
+    ufw:
+      state: enabled
+      tags:
+        - web_server_setup

@@ -1,0 +1,30 @@
+---
+- name: Setup file_servers
+  hosts: file_servers
+  become: true
+
+  tasks:
+    - name: Install Samba
+      package:
+        name: samba
+        state: present
+
+    - name: Start and enable Samba
+      ufw:
+        rule: allow
+        port: "137,138,139,445"
+        proto: tcp
+
+    - name: Copy admin_manual file
+      copy:
+        src: admin_manual
+        dest: /usr/local/bin/
+      tags:
+        - file_server_setup
+    
+      - name: Download Pycharm Community Edition
+        get_url:
+          url: https://download.jetbrains.com/python/pycharm-community-2024.1.2.tar.gz
+          dest: /usr/local/bin/pycharm-community-2024.1.2.tar.gz
+        tags:
+          - file_server_setup
