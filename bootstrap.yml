@@ -9,29 +9,43 @@
     apt:
       update_cache: yes
     when: ansible_distribution == "Ubuntu"
- 
-  - name: Add admin to the primary group
-    group:
-      name: admin1
-      state: present
+  
+  - name: Install Updates (Oracle Linux)
+    dnf:
+      update_only: yes
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "OracleLinux"
 
-  - name: Add admin to the secondary group
-    group:
-      name: "{{ item }}"
-      state: present
-    loop:
-      - sudo
-      - adm
-      - root
+  - name: Install Updates (Ubuntu Linux)
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
 
-
-  - name: Create admin user
+  - name: create a user admin1 (Ubuntu)
+    tags: boostrap
     user:
-      name: admin
-      group: admin1
-      groups: sudo,adm,root
-
-  - name: Add a sudoer file for admin
+      name: admin1
+      groups:
+        - sudo
+        - adm
+        - root
+      shell: /bin/bash
+    when: ansible_distribution == "Ubuntu"
+   
+  - name: create a user admin1 (OracleLinux)
+    tags: boostrap
+    user:  
+      name: admin1  
+      groups:
+        - sudo
+        - adm
+        - root
+    when: ansible_distribution == "OraclLinux" 
+  
+  - name: Add a sudoer file for admin1
+    tags: bootstrap
     copy:
       src: sudoer_admin
       dest: /etc/sudoers.d/admin
@@ -39,15 +53,9 @@
       group: root
       mode: 0440
   
-  - name: Add ssh key for admin
-    tags: always
+  - name: Add ssh key for admin1
+    tags: always,bootsrap
     authorized_key:
-      user: admin
+      user: admin1
       key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHLbfaXRUqSOibSmlXp00TLTefA4I2dBkEM0On7LhPPl ansible
 
-
-  - name: Add Ansible SSH key to each node authorized_keys
-    authorized_key:
-      user: "{{ ansible_user }}"
-      key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
-      state: present

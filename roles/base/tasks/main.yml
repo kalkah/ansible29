@@ -47,17 +47,3 @@
     user: admin
     key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHLbfaXRUqSOibSmlXp00TLTefA4I2dBkEM0On7LhPPl ansible 
 
-- name: Ensure webadmin user exists (Ubuntu)
-  user:
-    name: webadmin
-    state: present
-    group: www-data
-  when: ansible_distribution == "Ubuntu"
-
-- name: Ensure webadmin user exists (Oracle Linux)
-  user:
-    name: webadmin
-    shell: /bin/bash
-    state: present
-    group: apache
-  when: ansible_distribution == "OracleLinux"
