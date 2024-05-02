@@ -1,9 +1,20 @@
 ---
-- hosts: all
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: Add ssh key for user admin
+    tags: always
+    authorized_key:
+      user: admin
+      key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHLbfaXRUqSOibSmlXp00TLTefA4I2dBkEM0On7LhPPl ansible 
+
+- hosts: web_servers
   become: true
   tasks:
 
   - name: install Apache and PHP for Ubuntu Servers
+    tags: apache,apache2,ubuntu
     apt:
       name:
         - apache2
@@ -33,11 +44,11 @@
       path: /etc/apache2/apache2.conf # Adjust for your OS
       regexp: '^ServerAdmin'
       line: 'ServerAdmin martin.mato@ingrydacademy.com'
-    tags:
-      - web_server_setup
+    tags: webservers
+
 
   - name: Configure firewall for HTTP and HTTPS
+    tags: webservers
     ufw:
       state: enabled
-      tags:
-        - web_server_setup
+

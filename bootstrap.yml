@@ -3,9 +3,12 @@
 - hosts: all
   become: true
   tasks:
+
   - name: Update Repository Index
+    tags: always
     apt:
       update_cache: yes
+    when: ansible_distribution == "Ubuntu"
  
   - name: Add admin to the primary group
     group:
@@ -37,7 +40,8 @@
       mode: 0440
   
   - name: Add ssh key for admin
-    authorized: key
+    tags: always
+    authorized_key:
       user: admin
       key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHLbfaXRUqSOibSmlXp00TLTefA4I2dBkEM0On7LhPPl ansible
 
