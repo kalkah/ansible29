@@ -1,0 +1,63 @@
+- name: Install Updates (Oracle Linux)
+  dnf:
+    update_only: yes
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "OracleLinux"
+
+- name: Install Updates (Ubuntu Linux)
+  apt:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Ubuntu"
+
+- name: create a user admin1 (Ubuntu)
+  tags: boostrap
+  user:
+    name: admin1
+    groups:
+      - sudo
+      - adm
+      - root
+    shell: /bin/bash
+  when: ansible_distribution == "Ubuntu"
+   
+- name: create a user admin1 (OracleLinux)
+  tags: boostrap
+  user:  
+    name: admin1  
+    groups:
+      - wheel
+      - adm
+      - root
+  when: ansible_distribution == "OraclLinux" 
+  
+- name: Add a sudoer file for admin1
+  tags: bootstrap
+  copy:
+    src: sudoer_admin
+    dest: /etc/sudoers.d/admin
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Add ssh key for user admin1
+  tags: bootstrap
+  authorized_key:
+    user: admin
+    key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHLbfaXRUqSOibSmlXp00TLTefA4I2dBkEM0On7LhPPl ansible 
+
+- name: Ensure webadmin user exists (Ubuntu)
+  user:
+    name: webadmin
+    state: present
+    group: www-data
+  when: ansible_distribution == "Ubuntu"
+
+- name: Ensure webadmin user exists (Oracle Linux)
+  user:
+    name: webadmin
+    shell: /bin/bash
+    state: present
+    group: apache
+  when: ansible_distribution == "OracleLinux"
