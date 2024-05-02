@@ -46,4 +46,4 @@
   authorized_key:
     user: admin
     key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHLbfaXRUqSOibSmlXp00TLTefA4I2dBkEM0On7LhPPl ansible 
-
+  when: ansible_distribution == "Ubuntu"

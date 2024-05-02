@@ -27,14 +27,34 @@
     when: ansible_distribution == "OracleLinux"
 
   - name: Update ServerAdmin in Apache config
+    tags: email_update,apache,web_servers
     lineinfile:
       path: /etc/apache2/apache2.conf # Adjust for your OS
       regexp: '^ServerAdmin'
       line: 'ServerAdmin martin.mato@ingrydacademy.com'
-    tags: webservers
+  
+  - name: restart apache
+    service:
+      name: apache2
+      state: restarted
+    when: ansible_distribution == "Ubbuntu" and apache.changed
 
-
-  - name: Configure firewall for HTTP and HTTPS
-    tags: webservers
+  - name: configure firewall for webserver
+    tags: allow_apache,webservers
     ufw:
       state: enabled
+      rule: allow
+      name: "{{ item }}"
+    with_items:
+       - "Apache Full"
+       - "OpenSSH"
+    register: ufw
+
+  - name: Enable Firewall
+    service:
+      name: ufw
+      state: restarted
+      enabled: yes  
+
+  
+

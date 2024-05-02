@@ -1,13 +1,31 @@
 ---
 - name: Install MySQL database
-  package: mysql-server
-  state: present
+  tags: get_mysql,db_servers
+  package:
+    name:  mysql-server
+    state: latest
 
 - name: Start and enable MySQL service
+  tags: get_mysql,db_servers
   service:
     name: mysql
     state: started
-    enabled: true
+    enabled: yes
+
+- name: Install mysql_user requirements
+  tags: mysql_config,db_servers
+  package:
+    name: "{{ item }}"
+    state: present
+      - python3-mysqldb
+      - default-libmysqlclient-dev
+      - build-essential
+      - python3-pip
+      - python3-virtualenv
+      - python3-wheel, gcc 
+      - python3-dev
+      - pkg-config
+  
 
 - name: Set MySQL root password
   mysql_user:
