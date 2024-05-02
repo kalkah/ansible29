@@ -17,9 +17,3 @@
       tags:
         - file_servers
     
-    - name: Download Pycharm Community Edition
-      get_url:
-        url: https://download.jetbrains.com/python/pycharm-community-2024.1.2.tar.gz
-        dest: /usr/local/bin/pycharm-community-2024.1.2.tar.gz
-      tags:
-          - file_servers

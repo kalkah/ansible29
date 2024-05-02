@@ -17,14 +17,16 @@
   package:
     name: "{{ item }}"
     state: present
-      - python3-mysqldb
-      - default-libmysqlclient-dev
-      - build-essential
-      - python3-pip
-      - python3-virtualenv
-      - python3-wheel, gcc 
-      - python3-dev
-      - pkg-config
+  loop:
+    - python3-mysqldb
+    - default-libmysqlclient-dev
+    - build-essential
+    - python3-pip
+    - python3-virtualenv
+    - python3-wheel, gcc 
+    - python3-dev
+    - pkg-config
+  become: yes
   
 
 - name: Set MySQL root password
