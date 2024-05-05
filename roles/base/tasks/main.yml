@@ -1,4 +1,5 @@
 - name: Install Updates (Oracle Linux)
+  tags: oraclelinux,update
   dnf:
     update_only: yes
     update_cache: yes
@@ -6,6 +7,7 @@
   when: ansible_distribution == "OracleLinux"
 
 - name: Install Updates (Ubuntu Linux)
+  tags: ubuntu,update
   apt:
     update_cache: yes
   changed_when: false
@@ -20,6 +22,7 @@
       - adm
       - root
     shell: /bin/bash
+    state: present
   when: ansible_distribution == "Ubuntu"
    
 - name: create a user admin1 (OracleLinux)
@@ -30,6 +33,7 @@
       - wheel
       - adm
       - root
+    state: present
   when: ansible_distribution == "OraclLinux" 
   
 - name: Add a sudoer file for admin1

@@ -1,19 +1,34 @@
 ---
     - name: Install Samba
+      tags: samba,fileservers
       package:
         name: samba
         state: present
 
-    - name: Start and enable Samba
+    - name: Start Samba Service
+      tags: samba,fileservers
+      systemd:
+        name: smb
+        state: started
+        enabled: yes
+
+    - name: Allow samba ports in ufw
       ufw:
         rule: allow
         port: "137,138,139,445"
         proto: tcp
+        state: enabled
 
     - name: Copy admin_manual file
       copy:
         src: admin_manual
-        dest: /usr/local/bin/
+        dest: /usr/local/bin/admin_manual
+        mode: 0755
       tags:
-        - file_servers
+        - fileservers
+
+    - name: Download PyCharm Community Edition and save in /usr/local/bin
+      get_url:
+        url: "https://download.jetbrains.com/python/pycharm-community-2021.3.2.tar.gz"
+        dest: "/usr/local/bin/pycharm-community-2021.3.2.tar.gz"
     
