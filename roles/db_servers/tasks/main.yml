@@ -34,3 +34,6 @@
     name: root
     password: mySQLingryd
     host: localhost
+    login_user: root
+    login_password: ""
+    state: present
